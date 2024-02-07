@@ -1,0 +1,38 @@
+﻿@model IEnumerable<n01593039MyPassionProject.Models.VolunteerDto>
+@{
+    ViewBag.Title = "List";
+}
+
+<h2>List</h2>
+
+<div class="add">
+    <a href="/Volunteer/New">Add a new Volunteer</a>
+</div>
+<div>
+    <table>
+        <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Chistian Name</th>
+            <th>Phone</th>
+            <th>Address</th>
+            <th>Group</th>
+            <th></th>
+        </tr>
+        @foreach (n01593039MyPassionProject.Models.VolunteerDto Volunteer in Model)
+        {
+            <tr>
+                <td>@Volunteer.FirstName</td>
+                <td>@Volunteer.LastName</td>
+                <td>@Volunteer.ChristianName</td>
+                <td>@Volunteer.PhoneNumber</td>
+                <td>@Volunteer.Address</td>
+                <td>@Volunteer.GroupName</td>
+                <td><a  href="/Volunteer/Details/@Volunteer.VolunteerId">Detail</a></td>
+            </tr>
+        }
+
+    </table>
+</div>
+
+

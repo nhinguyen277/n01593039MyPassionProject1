@@ -1,0 +1,32 @@
+﻿@model IEnumerable<n01593039MyPassionProject.Models.GroupDto>
+@{
+    ViewBag.Title = "List";
+}
+
+<h2>List Groups</h2>
+
+<div class="add">
+    <button type="button">Add A New Group</button>
+</div>
+<div>
+    <table>
+        <tr>
+            <th>#</th>
+            <th>Group Name</th>
+            <th>Description</th>
+            <th></th>
+        </tr>
+        @foreach (n01593039MyPassionProject.Models.GroupDto Group in Model)
+        {
+            <tr>
+                <td>@Group.GroupId</td>
+                <td>@Group.GroupName</td>
+                <td>@Group.Description</td>
+                <td><button type="button">Detail</button></td>
+            </tr>
+        }
+
+    </table>
+</div>
+
+
