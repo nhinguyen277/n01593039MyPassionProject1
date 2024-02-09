@@ -1,0 +1,17 @@
+﻿@model n01593039MyPassionProject.Models.ActivityDto
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Acticity Details</h2>
+<a href="/Activity/List">Go back to list</a>
+<br />
+<a href="/Activity/Edit/@Model.ActivityId">Update</a>
+<br />
+
+<h2>Activity Name: @Model.ActivityName</h2>
+<div>Description: @Model.Description</div>
+<div>Date Time: @Model.DateTime</div>
+
+    <div><a style="color:#ab2020;" href="/Activity/DeleteConfirm/@Model.ActivityId">Delete</a></div>
+</div>

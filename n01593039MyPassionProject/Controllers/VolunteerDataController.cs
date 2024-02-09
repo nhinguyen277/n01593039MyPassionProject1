@@ -105,6 +105,58 @@ namespace n01593039MyPassionProject.Controllers
                 return CreatedAtRoute("DefaultApi", new { id = Volunteer.VolunteerId }, Volunteer);
             }
         // UpdateVolunteer
+
+        /// <summary>
+        /// Updates a particular volunteer in the system with POST Data input
+        /// </summary>
+        /// <param name="id">Represents the volunteer ID primary key</param>
+        /// <param name="Volunteer">JSON FORM DATA of an volunteer</param>
+        /// <returns>
+        /// HEADER: 204 (Success, No Content Response)
+        /// or
+        /// HEADER: 400 (Bad Request)
+        /// or
+        /// HEADER: 404 (Not Found)
+        /// </returns>
+        /// <example>
+        /// POST: api/VolunteerData/UpdateVolunteer/5
+        /// FORM DATA: volunteer JSON Object
+        /// </example>
+        [ResponseType(typeof(void))]
+        [HttpPost]
+        //[Authorize]
+        public IHttpActionResult UpdateVolunteer(int id, Volunteer Volunteer)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (id != Volunteer.VolunteerId)
+            {
+
+                return BadRequest();
+            }
+
+            db.Entry(Volunteer).State = EntityState.Modified;
+
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!VolunteerExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return StatusCode(HttpStatusCode.NoContent);
+        }
         //DeleteVolunteer
 
         /// <summary>
@@ -137,6 +189,20 @@ namespace n01593039MyPassionProject.Controllers
         }
         // related methods include:
         // ListVolunteerForGroup*/
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        private bool VolunteerExists(int id)
+        {
+            return db.Volunteers.Count(e => e.VolunteerId == id) > 0;
+        }
     }
     }
 

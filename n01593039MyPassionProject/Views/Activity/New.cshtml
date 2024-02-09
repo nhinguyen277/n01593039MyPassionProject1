@@ -1,0 +1,33 @@
+﻿@model n01593039MyPassionProject.Models.GroupDto
+@{
+    ViewBag.Title = "New";
+}
+
+<h2>New Activity</h2>
+
+<form action="/Activity/Create" method="POST">
+    <div class="row">
+        <label class="col-md-2 col-form-label">Activity Name:</label>
+        <div class="col-md-10">
+            <input class="form-control" type="text" name="ActivityName" />
+        </div>
+    </div>
+    <div class="row">
+        <label class="col-md-2 col-form-label">Description:</label>
+        <div class="col-md-10">
+            <textarea class="form-control" type="text" name="Description"></textarea>
+        </div>
+    </div>
+    <div class="row">
+        <label class="col-md-2 col-form-label">DateTime:</label>
+        <div class="col-md-10">
+            <input class="form-control" type="text" name="DateTime" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-10">
+            <input type="submit" value="Add Group" />
+            <a href="/Activity/List">Cancel</a>
+        </div>
+    </div>
+</form>

@@ -6,7 +6,7 @@
 <h2>List Groups</h2>
 
 <div class="add">
-    <button type="button">Add A New Group</button>
+    <a href="/Group/New">Add A New Group</a>
 </div>
 <div>
     <table>
@@ -22,7 +22,7 @@
                 <td>@Group.GroupId</td>
                 <td>@Group.GroupName</td>
                 <td>@Group.Description</td>
-                <td><button type="button">Detail</button></td>
+                <td><a href="/Group/Details/@Group.GroupId">Detail</a></td>
             </tr>
         }
 

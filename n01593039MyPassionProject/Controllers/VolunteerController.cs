@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
+using n01593039MyPassionProject.Models.ViewModels;
 
 namespace n01593039MyPassionProject.Controllers
 {
@@ -91,6 +92,12 @@ namespace n01593039MyPassionProject.Controllers
             return View(selectedVolunteer);
         }
 
+        public ActionResult Error()
+        {
+
+            return View();
+        }
+
         // GET: Volunteer/New
         [Authorize]
         public ActionResult New()
@@ -138,24 +145,55 @@ namespace n01593039MyPassionProject.Controllers
         }
 
         // GET: Volunteer/Edit/5
+        //[Authorize]
         public ActionResult Edit(int id)
         {
-            return View();
+            UpdateVolunteer ViewModel = new UpdateVolunteer();
+
+            //the existing volunteer information
+            string url = "https://localhost:44375/api/volunteerdata/findvolunteer/" + id;
+
+            HttpClient client = new HttpClient() { };
+
+            HttpResponseMessage response = client.GetAsync(url).Result;
+
+            VolunteerDto SelectedVolunteer = response.Content.ReadAsAsync<VolunteerDto>().Result;
+            ViewModel.SelectedVolunteer = SelectedVolunteer;
+
+            // all groups to choose from when updating this volunteer
+            //the existing volunteer information
+
+            url = "https://localhost:44375/api/groupdata/listgroups/";
+
+            response = client.GetAsync(url).Result;
+
+            IEnumerable<GroupDto> GroupOptions = response.Content.ReadAsAsync<IEnumerable<GroupDto>>().Result;
+
+            ViewModel.GroupOptions = GroupOptions;
+
+            return View(ViewModel);
         }
 
-        // POST: Volunteer/Edit/5
+        // POST: Volunteer/Update/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        //[Authorize]
+        public ActionResult Update(int id, Volunteer Volunteer)
         {
-            try
+            GetApplicationCookie();//get token credentials   
+            string url = "https://localhost:44375/api/volunteerdata/updatevolunteer/" + id;
+            HttpClient client = new HttpClient() { };
+            string jsonpayload = jss.Serialize(Volunteer);
+            HttpContent content = new StringContent(jsonpayload);
+            content.Headers.ContentType.MediaType = "application/json";
+            HttpResponseMessage response = client.PostAsync(url, content).Result;
+            Debug.WriteLine(content);
+            if (response.IsSuccessStatusCode)
             {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Index");
+                return RedirectToAction("List");
             }
-            catch
+            else
             {
-                return View();
+                return RedirectToAction("Error");
             }
         }
 

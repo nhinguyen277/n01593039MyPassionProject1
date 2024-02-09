@@ -5,36 +5,59 @@
 
 <h2>Create Volunteer</h2>
 <form action="/Volunteer/Create" method="POST">
-    <div>
-        <label>First Name:</label> <input type="text" name="FirstName" />
-    </div>
-    <div>
-        <label>Last Name:</label> <input type="text" name="LastName" />
-    </div>
-    <div>
-        <label>Christian Name:</label> <input type="text" name="ChristianName" />
-    </div>
-    <div>
-        <label>Email:</label> <input type="text" name="Email" />
-    </div>
-    <div>
-        <label>Phone Number:</label> <input type="number" name="PhoneNumber" />
-    </div>
-    <div>
-        <label>Address:</label> <input type="text" name="Address" />
-    </div>
-    <div>
-        <label>Group:</label>
-        <select name="GroupId">
-            @foreach (var groups in Model)
-            {
-                <option value="@groups.GroupId">@groups.GroupName</option>
+    <div class="row">
+        <label class="col-md-2 col-form-label">First Name:</label>
+        <div class="col-md-10">
+            <input class="form-control" type="text" name="FirstName" />
+        </div>
+        </div>
+    <div class="row">
+        <label class="col-md-2 col-form-label">Last Name:</label>
+        <div class="col-md-10">
+            <input class="form-control" type="text" name="LastName" />
+            </div>
+        </div>
+        <div class="row">
+            <label class="col-md-2 col-form-label">Christian Name:</label> 
+            <div class="col-md-10">
+                <input class="form-control" type="text" name="ChristianName" />
+                </div>
+            </div>
+        <div class="row">
+            <label class="col-md-2 col-form-label">Email:</label>
+            <div class="col-md-10">
+                <input  class="form-control" type="text" name="Email" />
+            </div>
+            </div>
+        <div class="row">
+            <label class="col-md-2 col-form-label">Phone Number:</label>
+            <div class="col-md-10">
+                <input class="form-control" type="text" name="PhoneNumber" />
+                </div>
+            </div>
+        <div class="row">
+            <label class="col-md-2 col-form-label">Address:</label>
+            <div class="col-md-10">
+                <input class="form-control" type="text" name="Address" />
+                </div>
+            </div>
+        <div class="row">
+            <label class="col-md-2 col-form-label">Group:</label>
+            <div class="col-md-10">
+                <select name="GroupId">
+                    @foreach (var groups in Model)
+                    {
+                        <option value="@groups.GroupId">@groups.GroupName</option>
 
-            }
-        </select>
-    </div>
-    <div>
-        <input type="submit" value="Add Volunteer" />
-
-    </div>
+                    }
+                </select>
+            </div>
+            </div>
+        <div class="row">
+            <div class="col-md-10">
+                <input type="submit" value="Add Volunteer" />
+                <a href="/Volunteer/List">Cancel</a>
+                </div>
+            </div>
 </form>
+

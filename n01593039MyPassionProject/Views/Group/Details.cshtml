@@ -1,0 +1,15 @@
+﻿@model n01593039MyPassionProject.Models.GroupDto
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Group Details</h2>
+<a href="/Group/List">Go back to list</a>
+<br />
+<a href="/Group/Edit/@Model.GroupId">Update</a>
+<br />
+
+<h2>Group Name: @Model.GroupName</h2>
+<div>Description: @Model.Description</div>
+<div><a style="color:#ab2020;" href="/Group/DeleteConfirm/@Model.GroupId">Delete</a></div>
+

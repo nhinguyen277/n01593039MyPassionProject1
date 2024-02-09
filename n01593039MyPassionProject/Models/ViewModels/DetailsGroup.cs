@@ -9,5 +9,7 @@ namespace n01593039MyPassionProject.Models.ViewModels
     {
         public GroupDto SelectedGroup { get; set; }
         public IEnumerable<VolunteerDto> RelatedVolunteers { get; set; }
+
+        public IEnumerable<ActivityDto> KeptActivities { get; set; }
     }
 }
