@@ -33,6 +33,71 @@ namespace n01593039MyPassionProject.Controllers
             return GroupDtos;
         }
 
+        /// <summary>
+        /// Gathers information about groups related to a particular activity
+        /// </summary>
+        /// <returns>
+        /// HEADER: 200 (OK)
+        /// CONTENT: all groups in the database that match to a particular activity id
+        /// </returns>
+        /// <param name="id">Activity Id.</param>
+        /// <example>
+        /// GET: api/GroupData/ListGroupsForActivity/1
+        /// </example>
+        [HttpGet]
+        [ResponseType(typeof(GroupDto))]
+
+        public IHttpActionResult ListGroupsForActivity(int id)
+        {
+            //all activities that have groups which match with our ID
+            List<Group> Groups = db.Groups.Where(
+                g => g.Activities.Any(
+                    a => a.ActivityId == id
+                )).ToList();
+            List<GroupDto> GroupDtos = new List<GroupDto>();
+
+            Groups.ForEach(b => GroupDtos.Add(new GroupDto()
+            {
+                GroupId = b.GroupId,
+                GroupName = b.GroupName,
+                Description = b.Description,
+
+            }));
+
+            return Ok(GroupDtos);
+        }
+
+        /// <summary>
+        /// Returns Groups in the system not joining in a particular activity.
+        /// </summary>
+        /// <returns>
+        /// HEADER: 200 (OK)
+        /// CONTENT: all groups in the database not joining in a particular activity
+        /// </returns>
+        /// <param name="id">Activity Primary Key</param>
+        /// <example>
+        /// GET: api/GroupData/ListGroupsNotJoinInActivity/1
+        /// </example>
+        [HttpGet]
+        [ResponseType(typeof(GroupDto))]
+        public IHttpActionResult ListGroupsNotJoinInActivity(int id)
+        {
+            List<Group> Groups = db.Groups.Where(
+               g => !g.Activities.Any(
+                   a => a.ActivityId == id
+               )).ToList();
+            List<GroupDto> GroupDtos = new List<GroupDto>();
+
+            Groups.ForEach(b => GroupDtos.Add(new GroupDto()
+            {
+                GroupId = b.GroupId,
+                GroupName = b.GroupName,
+                Description = b.Description,
+
+            }));
+
+            return Ok(GroupDtos);
+        }
         // Find Group
         // GET: api/GroupData/FindGroup/2
 

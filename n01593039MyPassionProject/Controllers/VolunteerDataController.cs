@@ -19,12 +19,56 @@ namespace n01593039MyPassionProject.Controllers
 
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // List Volunteer
+        /// <summary>
+        /// Returns all volunteres in the system.
+        /// </summary>
+        /// <returns>
+        /// HEADER: 200 (OK)
+        /// CONTENT: all volunteers in the database, including their associated groups.
+        /// </returns>
+        /// <example>
+        /// GET: api/VolunteerData/ListVolunteers
+        /// </example>
         [HttpGet]
         [Route("api/VolunteerData/ListVolunteers")]
         public List<VolunteerDto> ListVolunteers()
         {
             List<Volunteer> Volunteers = db.Volunteers.ToList();
+            List<VolunteerDto> VolunteerDtos = new List<VolunteerDto>();
+
+            Volunteers.ForEach(b => VolunteerDtos.Add(new VolunteerDto()
+            {
+                VolunteerId = b.VolunteerId,
+                FirstName = b.FirstName,
+                LastName = b.LastName,
+                ChristianName = b.ChristianName,
+                PhoneNumber = b.PhoneNumber,
+                Email = b.Email,
+                Address = b.Address,
+                GroupId = b.GroupId,
+                GroupName = b.Group.GroupName,
+
+            }));
+            return VolunteerDtos;
+        }
+
+
+        /// <summary>
+        /// Gathers information about all volunteers related to a particular groups ID
+        /// </summary>
+        /// <returns>
+        /// HEADER: 200 (OK)
+        /// CONTENT: all volunteers in the database, including their associated groups matched with a particular groups Id
+        /// </returns>
+        /// <param name="id">Groups Id.</param>
+        /// <example>
+        /// GET: api/VolunteerData/ListVolunteersForGroups/3
+        /// </example>
+        [HttpGet]
+        [ResponseType(typeof(VolunteerDto))]
+        public List<VolunteerDto> ListVolunteersForGroups(int id)
+        {
+            List<Volunteer> Volunteers = db.Volunteers.Where(a=>a.GroupId== id).ToList();
             List<VolunteerDto> VolunteerDtos = new List<VolunteerDto>();
 
             Volunteers.ForEach(b => VolunteerDtos.Add(new VolunteerDto()

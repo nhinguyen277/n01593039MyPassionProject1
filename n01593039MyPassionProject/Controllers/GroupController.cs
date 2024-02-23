@@ -71,6 +71,7 @@ namespace n01593039MyPassionProject.Controllers
             //https://localhost:44375/api/groupdata/findgroup/{id}
             // use Http client to access the information
             HttpClient client = new HttpClient() { };
+            DetailsGroup ViewModel = new DetailsGroup();
             //set the url
             string url = "https://localhost:44375/api//groupdata/findgroup/" + id;
             HttpResponseMessage response = client.GetAsync(url).Result;
@@ -79,11 +80,29 @@ namespace n01593039MyPassionProject.Controllers
             Debug.WriteLine("the response code is:");
             Debug.WriteLine(response.StatusCode);
 
-            GroupDto selectedGroup = response.Content.ReadAsAsync<GroupDto>().Result;
+            GroupDto SelectedGroup = response.Content.ReadAsAsync<GroupDto>().Result;
             Debug.WriteLine("Received volunteers: ");
-            Debug.WriteLine(selectedGroup.GroupName);
+            Debug.WriteLine(SelectedGroup.GroupName);
+            ViewModel.SelectedGroup = SelectedGroup;
 
-            return View(selectedGroup);
+
+
+            // showcase information about volunteers related to this group
+            // send a request to gather information about volunteers related to a particular group id
+
+            url = "https://localhost:44375/api/volunteerdata/listvolunteersforgroups/" + id;
+            response = client.GetAsync(url).Result;
+            IEnumerable<VolunteerDto> RelatedVolunteers = response.Content.ReadAsAsync<IEnumerable<VolunteerDto>>().Result;
+            ViewModel.RelatedVolunteers = RelatedVolunteers;
+
+
+            // show all activities were joined in by this group
+            url = "https://localhost:44375/api/activitydata/listactivitiesforgroup/" + id;
+            response = client.GetAsync(url).Result;
+            IEnumerable<ActivityDto> JoinedActivities = response.Content.ReadAsAsync<IEnumerable<ActivityDto>>().Result;
+            ViewModel.JoinedActivities = JoinedActivities;
+
+            return View(ViewModel);
         }
         public ActionResult Error()
         {

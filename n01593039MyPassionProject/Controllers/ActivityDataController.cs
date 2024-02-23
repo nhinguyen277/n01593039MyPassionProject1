@@ -16,7 +16,7 @@ namespace n01593039MyPassionProject.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // List Activitys
+        // List Activities
         [HttpGet]
         [Route("api/ActivityData/ListActivities")]
         public List<ActivityDto> ListActivities()
@@ -41,24 +41,26 @@ namespace n01593039MyPassionProject.Controllers
         /// HEADER: 200 (OK)
         /// CONTENT: all activities in the database that match to a particular group id
         /// </returns>
-        /// <param name="id">Group ID.</param>
+        /// <param name="id">Group Id.</param>
         /// <example>
         /// GET: api/ActivityData/ListActivitiesForGroup/1
         /// </example>
-        /*[HttpGet]
+        [HttpGet]
         [ResponseType(typeof(ActivityDto))]
+        
         public IHttpActionResult ListActivitiesForGroup(int id)
         {
             //all activities that have groups which match with our ID
             List<Activity> Activities = db.Activities.Where(
                 a => a.Groups.Any(
-                    k => k.GroupId == id
+                    g => g.GroupId == id
                 )).ToList();
             List<ActivityDto> ActivityDtos = new List<ActivityDto>();
 
             Activities.ForEach(a => ActivityDtos.Add(new ActivityDto()
             {
                 ActivityId = a.ActivityId,
+                ActivityName = a.ActivityName,
                 Description = a.Description,
                 DateTime = a.DateTime,
             }));
@@ -81,7 +83,7 @@ namespace n01593039MyPassionProject.Controllers
         /// </example>
         [HttpPost]
         [Route("api/ActivityData/AssociateActivityWithGroup/{activityid}/{groupid}")]
-        [Authorize]
+        
         public IHttpActionResult AssociateActivityWithGroup(int activityid, int groupid)
         {
 
@@ -103,7 +105,45 @@ namespace n01593039MyPassionProject.Controllers
             db.SaveChanges();
 
             return Ok();
-        }*/
+        }
+        /// <summary>
+        /// Removes an association between a particular group and a particular activity
+        /// </summary>
+        /// <param name="activityid">The activity ID primary key</param>
+        /// <param name="groupid">The group ID primary key</param>
+        /// <returns>
+        /// HEADER: 200 (OK)
+        /// or
+        /// HEADER: 404 (NOT FOUND)
+        /// </returns>
+        /// <example>
+        /// POST api/ActivityData/AssociateActivityWithGroup/9/1
+        /// </example>
+        [HttpPost]
+        [Route("api/ActivityData/UnAssociateActivityWithGroup/{activityid}/{groupid}")]
+        
+        public IHttpActionResult UnAssociateActivityWithGroup(int activityid, int groupid)
+        {
+
+            Activity SelectedActivity = db.Activities.Include(a => a.Groups).Where(a => a.ActivityId == activityid).FirstOrDefault();
+            Group SelectedGroup = db.Groups.Find(groupid);
+
+            if (SelectedActivity == null || SelectedGroup == null)
+            {
+                return NotFound();
+            }
+
+            Debug.WriteLine("input activity id is: " + activityid);
+            Debug.WriteLine("selected activity name is: " + SelectedActivity.ActivityName);
+            Debug.WriteLine("input group id is: " + groupid);
+            Debug.WriteLine("selected group name is: " + SelectedGroup.GroupName);
+
+
+            SelectedActivity.Groups.Remove(SelectedGroup);
+            db.SaveChanges();
+
+            return Ok();
+        }
 
         /// <summary>
         /// Returns all activities in the system.
@@ -154,7 +194,7 @@ namespace n01593039MyPassionProject.Controllers
         /// </example>
         [ResponseType(typeof(Activity))]
         [HttpPost]
-        //[Authorize]
+        [Authorize]
         public IHttpActionResult AddActivity(Activity activity)
         {
             if (!ModelState.IsValid)
@@ -186,7 +226,7 @@ namespace n01593039MyPassionProject.Controllers
         /// </example>
         [ResponseType(typeof(void))]
         [HttpPost]
-        //[Authorize]
+        [Authorize]
         public IHttpActionResult UpdateActivity(int id, Activity activity)
         {
             if (!ModelState.IsValid)

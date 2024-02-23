@@ -44,7 +44,7 @@ namespace n01593039MyPassionProject.Controllers
         }
         // GET: Volunteer/List
         // Objective: a webpage that lists the bikes in our system
-        public ActionResult List()
+        public ActionResult List(string SearchKey = null)
             {
                 // get volunteer data through an Http request
                 // GET {resource}/api/volunteerdata/listvolunteers
@@ -62,10 +62,23 @@ namespace n01593039MyPassionProject.Controllers
                     Debug.WriteLine("Received volunteers: " + volunteer.FirstName);
                 }
 
+            if (SearchKey != null)
+            {
+                var searchData = Volunteers.Where(v => v.FirstName.Contains(SearchKey)).ToList();
+                if (searchData.Count == 0)
+                {
+                    ViewBag.Msg = "No result";
+                    return View();
 
+                }
+                else
+                {
+                    return View(searchData);
+                }
+            }
 
-                // Views/Volunteers/List.cshtml
-                return View(Volunteers);
+            // Views/Volunteers/List.cshtml
+            return View(Volunteers);
             }
 
     // GET: api/Volunteer/Details/5

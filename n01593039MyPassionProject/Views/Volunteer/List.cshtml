@@ -8,6 +8,13 @@
 <div class="add">
     <a href="/Volunteer/New">Add a new Volunteer</a>
 </div>
+<div style="margin-bottom:10px">
+<form method="GET" action="/Volunteer/List">
+    <input type="text" name="SearchKey" />
+    <input type="submit" value="Search">
+</form>
+</div>
+
 <div>
     <table>
         <tr>
@@ -19,20 +26,28 @@
             <th>Group</th>
             <th></th>
         </tr>
-        @foreach (n01593039MyPassionProject.Models.VolunteerDto Volunteer in Model)
+        @if (ViewBag.Msg == null)
         {
-            <tr>
-                <td>@Volunteer.FirstName</td>
-                <td>@Volunteer.LastName</td>
-                <td>@Volunteer.ChristianName</td>
-                <td>@Volunteer.PhoneNumber</td>
-                <td>@Volunteer.Address</td>
-                <td>@Volunteer.GroupName</td>
-                <td><a  href="/Volunteer/Details/@Volunteer.VolunteerId">Detail</a></td>
-            </tr>
+
+
+            foreach (n01593039MyPassionProject.Models.VolunteerDto Volunteer in Model)
+            {
+                <tr>
+                    <td>@Volunteer.FirstName</td>
+                    <td>@Volunteer.LastName</td>
+                    <td>@Volunteer.ChristianName</td>
+                    <td>@Volunteer.PhoneNumber</td>
+                    <td>@Volunteer.Address</td>
+                    <td>@Volunteer.GroupName</td>
+                    <td><a href="/Volunteer/Details/@Volunteer.VolunteerId">Detail</a></td>
+                </tr>
+            }
         }
 
     </table>
+    <div style="margin: 10px 0 10px 500px; color: slategrey">
+    <h5>@ViewBag.Msg</h5>
+    </div>
 </div>
 
 

@@ -39,15 +39,22 @@ namespace n01593039MyPassionProject.Controllers
 
         // GET: Activity/List
         // Objective: a webpage that lists the Activities in our system
+        [Authorize]
         public ActionResult List()
         {
+
             // get Activity data through an Http request
             // GET {resource}/api/activitydata/listactivities
             //https://localhost:44375/api/activitydata/listactivities
+
+            // we need to prove who we are to access the activities resourse
+            GetApplicationCookie();
+
             // use Http client to access the information
 
             HttpClient client = new HttpClient() { };
             //set the url
+            // we will borrow the token from this request
             string url = "https://localhost:44375/api/activitydata/listactivities";
             HttpResponseMessage response = client.GetAsync(url).Result;
             List<ActivityDto> Activities = response.Content.ReadAsAsync<List<ActivityDto>>().Result;
@@ -57,15 +64,17 @@ namespace n01593039MyPassionProject.Controllers
         }
 
         // GET: Activity/Details/5
+        [Authorize]
         public ActionResult Details(int id)
         {
-            //DetailsActivity ViewModel = new DetailsActivity();
+            
+            DetailsActivity ViewModel = new DetailsActivity();
 
             //objective: communicate with our activities data api to retrieve one activity
             //curl https://localhost:44375/api/activitydata/findactivity/{id}
 
             HttpClient client = new HttpClient() { };
-
+            GetApplicationCookie();
             string url = "https://localhost:44375/api/activitydata/findactivity/" + id;
             HttpResponseMessage response = client.GetAsync(url).Result;
 
@@ -76,27 +85,26 @@ namespace n01593039MyPassionProject.Controllers
             Debug.WriteLine("activity received : ");
             Debug.WriteLine(SelectedActivity.ActivityName);
 
-            //ViewModel.SelectedActivity = SelectedActivity;
-            
+            ViewModel.SelectedActivity = SelectedActivity;
             //show associated groups with this activity
-            /*url = "https://localhost:44375/api/activitydata/listgroupsforactivity/" + id;
+            url = "https://localhost:44375/api/groupdata/listgroupsforactivity/" + id;
             response = client.GetAsync(url).Result;
             IEnumerable<GroupDto> ResponsibleGroups = response.Content.ReadAsAsync<IEnumerable<GroupDto>>().Result;
-
             ViewModel.ResponsibleGroups = ResponsibleGroups;
 
-            url = "https://localhost:44375/api/activitydata/listgroupsnotjoininactivity/" + id;
+
+            url = "https://localhost:44375/api/groupdata/listgroupsnotjoininactivity/" + id;
             response = client.GetAsync(url).Result;
             IEnumerable<GroupDto> AvailableGroups = response.Content.ReadAsAsync<IEnumerable<GroupDto>>().Result;
 
-            ViewModel.AvailableGroups = AvailableGroups;*/
+            ViewModel.AvailableGroups = AvailableGroups;
 
 
-            return View(SelectedActivity);
+            return View(ViewModel);
         }
 
         //POST: Activity/Associate/{activityid}
-        /*[HttpPost]
+        [HttpPost]
         [Authorize]
         public ActionResult Associate(int id, int GroupId)
         {
@@ -132,7 +140,7 @@ namespace n01593039MyPassionProject.Controllers
             HttpResponseMessage response = client.PostAsync(url, content).Result;
 
             return RedirectToAction("Details/" + id);
-        }*/
+        }
 
 
         public ActionResult Error()

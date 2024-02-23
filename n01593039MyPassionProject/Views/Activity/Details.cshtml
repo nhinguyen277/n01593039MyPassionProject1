@@ -1,17 +1,40 @@
-﻿@model n01593039MyPassionProject.Models.ActivityDto
+﻿@model n01593039MyPassionProject.Models.ViewModels.DetailsActivity
 @{
     ViewBag.Title = "Details";
 }
 
-<h2>Acticity Details</h2>
+<h2>Activity Details</h2>
 <a href="/Activity/List">Go back to list</a>
 <br />
-<a href="/Activity/Edit/@Model.ActivityId">Update</a>
+<a href="/Activity/Edit/@Model.SelectedActivity.ActivityId">Update</a>
 <br />
 
-<h2>Activity Name: @Model.ActivityName</h2>
-<div>Description: @Model.Description</div>
-<div>Date Time: @Model.DateTime</div>
+<h2>Activity Name: @Model.SelectedActivity.ActivityName</h2>
+<div>Description: @Model.SelectedActivity.Description</div>
+<div>Date Time: @Model.SelectedActivity.DateTime</div>
+<div>
+    <h2>Groups Responsible for @Model.SelectedActivity.ActivityName:</h2>
+    @foreach (var group in Model.ResponsibleGroups)
+    {
 
-    <div><a style="color:#ab2020;" href="/Activity/DeleteConfirm/@Model.ActivityId">Delete</a></div>
+        <a href="/Group/Details/@group.GroupId">@group.GroupName</a> <a style="color:#ab2020;" href="/Activity/Unassociate/@Model.SelectedActivity.ActivityId?GroupId=@group.GroupId">[x]</a><br />
+    }
+
+    <div>
+        <h4>Add new Group to join in  @Model.SelectedActivity.ActivityName</h4>
+        <form method="POST" action="/Activity/Associate/@Model.SelectedActivity.ActivityId">
+            <select name="GroupId">
+                @foreach (var group in Model.AvailableGroups)
+                {
+                    <option value="@group.GroupId">@group.GroupName</option>
+                }
+
+            </select>
+            <input type="submit" value="Associate Group" />
+        </form>
+    </div>
+
 </div>
+
+<div><a style="color:#ab2020;" href="/Activity/DeleteConfirm/@Model.SelectedActivity.ActivityId">Delete</a></div>
+
